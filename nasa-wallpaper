@@ -5,6 +5,15 @@
 #sed -i 's#^\(wallpaper\s*=\s*\).*$#\1/tmp/NASA.jpg#' /home/david/.config/pcmanfm/LXDE/desktop-items-0.conf
 #kwriteconfig --file plasma-desktop-appletsrc --group Containments --group 126 --group Wallpaper --group image --key wallpaper
 
+function xfce_all {
+	file="$1"
+	properties=($(xfconf-query --channel xfce4-desktop --list | grep last-image))
+	echo "found ${#properties[@]}: ${properties[*]}"
+	for property in ${properties[@]}; do
+		xfconf-query -c xfce4-desktop -p "$property" -s "$file"
+	done
+}
+
 echo -e "Copyright 2017 David Población Criado"
 echo -e "Apache License, Version 2.0\n"
 API_KEY="Z1an39TefCytrrClcLSxNGJDGwv09QLHD6zo74R8"
@@ -99,7 +108,8 @@ while getopts 'd:k:c:p:P:y:Y:e:E:w:i:q:l:t:T: anrvh' opt; do
 				"gnome") gsettings set org.gnome.desktop.background picture-uri "$HOME/.nasa-wallpaper/$FECHA.jpg";;
 				"cinnamon") gsettings set org.cinnamon.desktop.background picture-uri "$HOME/.nasa-wallpaper/$FECHA.jpg";;
 				"lxde") pcmanfm --set-wallpaper=$HOME/.nasa-wallpaper/$FECHA.jpg;;
-				"xfce") xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "$HOME/.nasa-wallpaper/$FECHA.jpg";;
+				#"xfce") xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "$HOME/.nasa-wallpaper/$FECHA.jpg";;
+				"xfce") xfce_all "$HOME/.nasa-wallpaper/$FECHA.jpg";;
 				"mate") gsettings set org.mate.background picture-filename "$HOME/.nasa-wallpaper/$FECHA.jpg";;
 				"feh") feh --bg-scale "$HOME/.nasa-wallpaper/$FECHA.jpg";;
 			esac;;	
@@ -153,7 +163,8 @@ while getopts 'd:k:c:p:P:y:Y:e:E:w:i:q:l:t:T: anrvh' opt; do
 				"gnome") gsettings set org.gnome.desktop.background picture-uri "$HOME/.nasa-wallpaper/$ID.jpg";;
 				"cinnamon") gsettings set org.cinnamon.desktop.background picture-uri "$HOME/.nasa-wallpaper/$ID.jpg";;
 				"lxde") pcmanfm --set-wallpaper=$HOME/.nasa-wallpaper/$ID.jpg;;
-				"xfce") xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "$HOME/.nasa-wallpaper/$ID.jpg";;
+				#"xfce") xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "$HOME/.nasa-wallpaper/$ID.jpg";;
+				"xfce") xfce_all "$HOME/.nasa-wallpaper/$ID.jpg";;
 				"mate") gsettings set org.mate.background picture-filename "$HOME/.nasa-wallpaper/$ID.jpg";;
 				"feh") feh --bg-scale "$HOME/.nasa-wallpaper/$ID.jpg";;
 			esac;;
